@@ -1,23 +1,18 @@
-package com.worldimage.carfax.data
+package com.worldimage.carfax.data.api
 
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.worldimage.carfax.data.response.VehicleListResponse
-import kotlinx.coroutines.Deferred
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import okhttp3.Interceptor
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
 
-//https://carfax-for-consumers.firebaseio.com/assignment.json
-
-interface ApiService {
-
-    @GET("assignment.json")
-    fun getCarListing(): Deferred<VehicleListResponse>
+class ApiService() {
 
     companion object {
-        operator fun invoke(): ApiService {
+
+        private const val BASE_URL = "https://carfax-for-consumers.firebaseio.com/"
+
+        operator fun invoke(): ApiInterface {
             val requestInterceptor = Interceptor {chain ->
 
                 val url = chain.request()
@@ -38,11 +33,11 @@ interface ApiService {
 
             return  Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl("https://carfax-for-consumers.firebaseio.com/")
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .baseUrl(BASE_URL)
+                .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(ApiService::class.java)
+                .create(ApiInterface::class.java)
         }
     }
 
