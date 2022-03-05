@@ -1,10 +1,16 @@
 package com.worldimage.carfax.ui
 
+import android.Manifest
+import android.Manifest.permission.CALL_PHONE
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,6 +28,7 @@ class MainActivity() : AppCompatActivity() {
     lateinit var viewModel: MainActivityViewModel
     lateinit var vehicleListAdapter: VehicleListAdapter
     lateinit var recyclerView: RecyclerView
+    private val requestCall = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +43,24 @@ class MainActivity() : AppCompatActivity() {
         vehicleListAdapter = VehicleListAdapter()
         recyclerView.adapter = vehicleListAdapter
 
+        //clickListner
+
+
+        //ask Permission
+        if (ContextCompat.checkSelfPermission(
+                this@MainActivity,
+                Manifest.permission.CALL_PHONE
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this@MainActivity,
+                arrayOf(Manifest.permission.CALL_PHONE),
+                requestCall
+            )
+        }
+
 
     }
-
-
 
     @SuppressLint("NotifyDataSetChanged")
     private fun loadApiData() {
