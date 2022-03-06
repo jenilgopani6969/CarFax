@@ -13,14 +13,18 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.worldimage.carfax.R
-import com.worldimage.carfax.data.response.Listings
+import com.worldimage.carfax.data.model.Listings
 import com.worldimage.carfax.ui.DetailedActivity
 import java.text.NumberFormat
 
 
 class VehicleListAdapter: RecyclerView.Adapter<VehicleListAdapter.MyViewHolder>() {
 
-    var vehicleList = listOf<Listings>()
+    private var vehicleList = listOf<Listings>()
+
+    fun setVehicleListData(listData: List<Listings>) {
+        this.vehicleList = listData
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VehicleListAdapter.MyViewHolder {
         val inflate = LayoutInflater.from(parent.context).inflate(R.layout.vehicle_list_item, parent, false)
@@ -67,7 +71,6 @@ class VehicleListAdapter: RecyclerView.Adapter<VehicleListAdapter.MyViewHolder>(
                 intent.putExtra("ls_engine",data.engine)
                 intent.putExtra("ls_fuel",data.fuel)
                 startActivity(itemView.context,intent,null)
-                Log.e("Clicked", data.toString())
             }
 
             //list Name
